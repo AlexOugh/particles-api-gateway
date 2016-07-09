@@ -1,0 +1,27 @@
+{
+  "name": "particles-api-gateway",
+  "version": "0.0.1",
+  "description": "Particles for Condensation that help build a AWS API Gateway",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Alex Ough",
+    "email": "alex.ough@sungardas.com"
+  },
+  "bugs": {
+    "url": "https://github.com/SungardAS/particles-api-gateway/issues"
+  },
+  "homepage": "https://github.com/SungardAS/particles-api-gateway",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SungardAS/particles-api-gateway.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "condensation": "^0.5.5",
+    "config": "^1.20.1",
+    "gulp": "^3.9.1",
+    "particles-core": "^0.4.5"
+  }
+}

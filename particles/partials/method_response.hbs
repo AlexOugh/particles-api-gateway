@@ -1,0 +1,9 @@
+{
+  "StatusCode": {{helper "m:core" "propertyValue" statusCode}},
+  "ResponseModels": {
+    {{helper "m:core" "propertyValue" contentType}}: {{helper "m:core" "propertyValue" responseModel}}
+  },
+  "ResponseParameters": {
+    "method.response.header.Access-Control-Allow-Origin": {{helper "m:core" "propertyValue" allowedOrigin}}
+  }
+}

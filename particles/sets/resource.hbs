@@ -1,0 +1,32 @@
+{{
+  resource "resource"
+  logicalId=(concat resourcePrefix "Resource")
+  restApiId=restApiId
+  parentId=parentId
+  pathPart=pathPart
+}}
+
+{{#each resourceMethods}}
+
+  {{
+    resource "method"
+    logicalId=(concat resourcePrefix "Resource" "Method" this.action)
+    restApiId=restApiId
+    resourceId=(ref (concat resourcePrefix "Resource"))
+    httpMethod=this.action
+    credentials=lambdaInvokeRoleId
+    uri=this.uri
+    contentType=this.contentType
+    template=this.template
+  }}
+
+{{/each}}
+
+{{
+  resource "option"
+  logicalId=(concat resourcePrefix "Resource" "MethodOption")
+  restApiId=restApiId
+  resourceId=(ref (concat resourcePrefix "Resource"))
+  contentType="application/json"
+  allowedMethod=optionAllowedMethod
+}}

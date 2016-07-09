@@ -1,0 +1,34 @@
+---
+authorizationType: "NONE"
+contentType: "application/json"
+allowedOrigin: "'*'"
+---
+{{#resource "m:core" "base"
+  type="AWS::ApiGateway::Method"
+}}
+  "Properties" : {
+    "RestApiId": {{helper "m:core" "propertyValue" restApiId}},
+    "ResourceId": {{helper "m:core" "propertyValue" resourceId}},
+    "HttpMethod": {{helper "m:core" "propertyValue" httpMethod}},
+    "AuthorizationType": {{helper "m:core" "propertyValue" authorizationType}},
+    "Integration": {
+      "Credentials": {{helper "m:core" "propertyValue" credentials}},
+      "IntegrationHttpMethod": "POST",
+      "Type": "AWS",
+      "Uri": {{helper "m:core" "propertyValue" uri}},
+      "RequestTemplates": {
+        {{helper "m:core" "propertyValue" contentType}}: {{helper "m:core" "propertyValue" template}}
+      },
+      "IntegrationResponses": [
+        {{ partial "integration_response" selectionPattern="" statusCode="200" }},
+        {{ partial "integration_response" selectionPattern="not permitted.*" statusCode="403" }},
+        {{ partial "integration_response" selectionPattern="unauthorized.*" statusCode="401" }}
+      ]
+    },
+    "MethodResponses": [
+      {{ partial "method_response" statusCode="200" contentType=contentType responseModel="Empty" allowedOrigin=allowedOrigin }},
+      {{ partial "method_response" statusCode="403" contentType=contentType responseModel="Empty" allowedOrigin=allowedOrigin }},
+      {{ partial "method_response" statusCode="401" contentType=contentType responseModel="Empty" allowedOrigin=allowedOrigin }}
+    ]
+  }
+{{/resource}}

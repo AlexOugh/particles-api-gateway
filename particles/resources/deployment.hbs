@@ -1,0 +1,9 @@
+{{#resource "m:core" "base"
+  type="AWS::ApiGateway::Deployment"
+}}
+  {{#helper "m:core" "properties"}}
+    {{helper "m:core" "property" "RestApiId"}}
+    {{helper "m:core" "property" "Description"}}
+    {{helper "m:core" "property" "StageName"}}
+  {{/helper}}
+{{/resource}}

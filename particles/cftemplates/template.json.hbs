@@ -1,0 +1,98 @@
+---
+resourceMethods:
+  -
+    action: "GET"
+    uri: "arn:aws:lambda:us-east-1:546276914724:function:lambda_function_for_get"
+    contentType: "application/json"
+    template: "{\"a\":\"get\"}"
+  -
+    action: "POST"
+    uri: "arn:aws:lambda:us-east-1:546276914724:function:lambda_function_for_post"
+    contentType: "application/json"
+    template: "{\"a\":\"post\"}"
+  -
+    action: "PUT"
+    uri: "arn:aws:lambda:us-east-1:546276914724:function:lambda_function_for_put"
+    contentType: "application/json"
+    template: "{\"a\":\"put\"}"
+  -
+    action: "DELETE"
+    uri: "arn:aws:lambda:us-east-1:546276914724:function:lambda_function_for_delete"
+    contentType: "application/json"
+    template: "{\"a\":\"delete\"}"
+
+responses:
+  -
+    statusCode: "200"
+    selectionPattern: ""
+    contentType: "application/json"
+    responseModel: "Empty"
+    allowedMethods: "'GET,PUT,POST,DELETE,OPTIONS'"
+    allowedHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    allowedOrigin: "'*'"
+  -
+    statusCode: "401"
+    selectionPattern: "unauthorized.**"
+    contentType: "application/json"
+    responseModel: "Empty"
+    allowedMethods: "'GET,PUT,POST,DELETE,OPTIONS'"
+    allowedHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    allowedOrigin: "'*'"
+  -
+    statusCode: "403"
+    selectionPattern: "not permitted.*"
+    contentType: "application/json"
+    responseModel: "Empty"
+    allowedMethods: "'GET,PUT,POST,DELETE,OPTIONS'"
+    allowedHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    allowedOrigin: "'*'"
+---
+
+{{#layout}}
+
+  {{
+     parameter "m:core" "base"
+     logicalId="RestApiName"
+     type="String"
+     description="Rest API Name"
+  }}
+
+  {{
+     parameter "m:core" "base"
+     logicalId="StageName"
+     type="String"
+     description="Deployment stage name"
+  }}
+
+  {{
+    resource "rest_api"
+    logicalId="RestApi"
+    description="Rest API"
+    name=(ref "RestApiName")
+  }}
+
+  {{
+    resource "lambda_invoke_role"
+    logicalId="LambdaInvokeRole"
+  }}
+
+  {{
+    set "resource"
+    resourcePrefix="Simple"
+    restApiId=(ref "RestApi")
+    parentId=(partial "m:core" "fn_get_att" logicalId="RestApi" attributeName="RootResourceId")
+    pathPart="simple"
+    lambdaInvokeRoleId=(ref "LambdaInvokeRole")
+    optionAllowedMethod="'GET,PUT,POST,DELETE,OPTIONS'"
+  }}
+
+  {{
+    resource "deployment"
+    logicalId="Deployment"
+    dependsOn="SimpleResource"
+    restApiId=(ref "RestApi")
+    description="Stage Deployment"
+    stageName=(ref "StageName")
+  }}
+
+{{/layout}}

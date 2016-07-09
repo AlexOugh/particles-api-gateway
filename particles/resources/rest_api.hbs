@@ -1,0 +1,8 @@
+{{#resource "m:core" "base"
+  type="AWS::ApiGateway::RestApi"
+}}
+  {{#helper "m:core" "properties"}}
+    {{helper "m:core" "property" "Description"}}
+    {{helper "m:core" "property" "Name"}}
+  {{/helper}}
+{{/resource}}

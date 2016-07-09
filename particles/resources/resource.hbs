@@ -1,0 +1,9 @@
+{{#resource "m:core" "base"
+  type="AWS::ApiGateway::Resource"
+}}
+  {{#helper "m:core" "properties"}}
+    {{helper "m:core" "property" "RestApiId"}}
+    {{helper "m:core" "property" "ParentId"}}
+    {{helper "m:core" "property" "PathPart"}}
+  {{/helper}}
+{{/resource}}

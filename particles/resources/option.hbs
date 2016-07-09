@@ -1,0 +1,29 @@
+---
+contentType: "application/json"
+allowedHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+allowedOrigin: "'*'"
+---
+{{#resource "m:core" "base"
+  type="AWS::ApiGateway::Method"
+}}
+  "Properties" : {
+    "RestApiId": {{helper "m:core" "propertyValue" restApiId}},
+    "ResourceId": {{helper "m:core" "propertyValue" resourceId}},
+    "HttpMethod": "OPTIONS",
+    "AuthorizationType": "NONE",
+    "Integration": {
+      "Type": "MOCK",
+      "RequestTemplates": {"application/json": "{\"statusCode\": 200}" },
+      "IntegrationResponses": [
+        {{ partial "integration_option_response" statusCode="200" allowedMethods=allowedMethod allowedHeaders=allowedHeaders allowedOrigin=allowedOrigin }},
+        {{ partial "integration_option_response" statusCode="403" allowedMethods=allowedMethod allowedHeaders=allowedHeaders allowedOrigin=allowedOrigin }},
+        {{ partial "integration_option_response" statusCode="401" allowedMethods=allowedMethod allowedHeaders=allowedHeaders allowedOrigin=allowedOrigin }}
+      ]
+    },
+    "MethodResponses": [
+      {{ partial "method_option_response" statusCode="200" contentType=contentType responseModel="Empty" allowedMethods=allowedMethod allowedHeaders=allowedHeaders allowedOrigin=allowedOrigin }},
+      {{ partial "method_option_response" statusCode="403" contentType=contentType responseModel="Empty" allowedMethods=allowedMethod allowedHeaders=allowedHeaders allowedOrigin=allowedOrigin }},
+      {{ partial "method_option_response" statusCode="401" contentType=contentType responseModel="Empty" allowedMethods=allowedMethod allowedHeaders=allowedHeaders allowedOrigin=allowedOrigin }}
+    ]
+  }
+{{/resource}}
